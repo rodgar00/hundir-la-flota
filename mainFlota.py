@@ -39,13 +39,13 @@ def colocar_barcos(tablero):
 
             direccion = int(input("¿En qué dirección? \n1. Arriba\n2. Derecha\n3. Abajo\n4. Izquierda\n>> "))
 
-            if direccion == 1:   # arriba
+            if direccion == 1:
                 coordsFinal1 = (fila - 1, columna)
-            elif direccion == 2:  # derecha
+            elif direccion == 2:
                 coordsFinal1 = (fila, columna + 1)
-            elif direccion == 3:  # abajo
+            elif direccion == 3:
                 coordsFinal1 = (fila + 1, columna)
-            elif direccion == 4:  # izquierda
+            elif direccion == 4:
                 coordsFinal1 = (fila, columna - 1)
             else:
                 raise ValueError("Dirección inválida")
