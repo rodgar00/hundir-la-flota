@@ -52,6 +52,6 @@ Ejemplo de tablero
 7                    
 8                    
 9                    
-* → Barco propio
+Asterisco → Barco propio
 X → Tocado en tablero rival
 O → Agua/fallo en tablero rival
