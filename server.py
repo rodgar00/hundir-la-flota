@@ -9,7 +9,8 @@ tablero_j1 = None
 tablero_j2 = None
 turno = "J1"
 
-# ---- FUNCIONES ----
+partida_activa = True
+
 def parse_tablero(texto):
     filas = texto.split("|")
     matriz = []
@@ -30,20 +31,18 @@ def quedan_barcos(tablero):
             return True
     return False
 
-# ---- BUCLE PRINCIPAL ----
-while True:
-    data, addr = server.recvfrom(10000)
-    msg = data.decode()
+while partida_activa:
+    datos, addr = server.recvfrom(10000)
+    mensaje = datos.decode()
 
-    # Recepción tableros
-    if msg.startswith("TABLERO_J1|"):
-        tablero_j1 = parse_tablero(msg.split("|",1)[1])
+    if mensaje.startswith("TABLERO_J1|"):
+        tablero_j1 = parse_tablero(mensaje.split("|", 1)[1])
         server.sendto(b"OK TABLERO_J1", addr)
         print("Tablero J1 recibido")
         continue
 
-    if msg.startswith("TABLERO_J2|"):
-        tablero_j2 = parse_tablero(msg.split("|",1)[1])
+    if mensaje.startswith("TABLERO_J2|"):
+        tablero_j2 = parse_tablero(mensaje.split("|", 1)[1])
         server.sendto(b"OK TABLERO_J2", addr)
         print("Tablero J2 recibido")
         continue
@@ -52,9 +51,8 @@ while True:
         server.sendto(b"Aun no estan los dos tableros", addr)
         continue
 
-    # Disparo
     try:
-        jugador, coords = msg.split("|")
+        jugador, coords = mensaje.split("|")
         f_str, c_str = coords.split(",")
         f, c = int(f_str), int(c_str)
     except:
@@ -66,18 +64,19 @@ while True:
         continue
 
     if jugador == "J1":
-        res = disparo(tablero_j2, f, c)
+        resultado = disparo(tablero_j2, f, c)
         if not quedan_barcos(tablero_j2):
             server.sendto(b"GANADOR: J1", addr)
-            print("J1 ha ganado")
-            break
+            partida_activa = False
+            continue
         turno = "J2"
     else:
-        res = disparo(tablero_j1, f, c)
+        resultado = disparo(tablero_j1, f, c)
         if not quedan_barcos(tablero_j1):
             server.sendto(b"GANADOR: J2", addr)
             print("J2 ha ganado")
-            break
+            partida_activa = False
+            continue
         turno = "J1"
 
-    server.sendto(f"Resultado: {res} | Turno: {turno}".encode(), addr)
+    server.sendto(f"Resultado: {resultado} | Turno: {turno}".encode(), addr)
