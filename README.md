@@ -40,7 +40,9 @@ Flujo de juego con turnos controlados y detección de ganador.
 
 Manejo básico de errores de entrada y coordenadas fuera del tablero.
 
-Ejemplo de tablero
+
+Tablero
+
    0 1 2 3 4 5 6 7 8 9
 0  *       *          
 1        *            
